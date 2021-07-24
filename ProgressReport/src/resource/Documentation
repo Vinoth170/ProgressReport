@@ -1,0 +1,17 @@
+Progress Report project
+
+This project is mainly for updating students progress report to their mail address.
+The package report contains classes ProgressReport_Excel, Excel, ReadFile.
+
+The class ProgressReport contains methods main, string array returnable method readSubjects and enterMark.
+The main method reads the course name, institute name and course name and calls the methods readSubjects and enterMark.
+The method readSubjects to get the subjects name from the user at the runtime and store it in a string array and return it to the main method.
+Then the main methods instantiate the Excel class and reads the students details from a text file named NameList and store it in a properties object.
+Then calls the enterMark method in which the Excel class method named reportCard will be called.
+
+The reportCard method will get the students marks and store in an integer array and calls the excel method.
+In the Excel class the excel sheet is created and send it to the class called SendMail as mail content using the method mail method in excel method.
+
+SendMail class will collect the excel in multipart object through the constructor and calls the mail method in SendMail class.
+The mail method will instantiate the object of type Mail, the message method will get session through the authenticate method from the child class Gmail
+and send the mail to the candidates.
