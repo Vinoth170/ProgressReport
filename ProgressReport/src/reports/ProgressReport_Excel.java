@@ -30,7 +30,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ProgressReport_Excel {
 	static Scanner scan=new Scanner(System.in);
-	public static void main(String[] args)throws Exception {
+	public static void main(String[] args) throws Exception{
 		ProgressReport_Excel progress=new ProgressReport_Excel();
 		
 		String[] details=new String[4];
@@ -54,6 +54,10 @@ public class ProgressReport_Excel {
 	}
 	
 	private String[] readSubjects() {
+		/*
+		 * Read the subjects which the students having in their academic year
+		 * And return it as string array to the main class.
+		 */
 		
 		System.out.print("Enter number of subjects: ");
 		int num=Integer.parseInt(scan.nextLine());
@@ -75,7 +79,11 @@ public class ProgressReport_Excel {
 			Map.Entry<String, String> map=(Map.Entry<String, String>)iter.next();
 			report.reportCard(map.getValue(),map.getKey());
 		}
-		
+		try {
+		report.save();
+		}catch(IOException ex) {
+			ex.printStackTrace();
+		}
 		System.out.println("Copy of the report is saved in your system");
 	}
 
@@ -119,6 +127,10 @@ class Excel{
 	}
 	
 	public void excel(String name,int[] marks,String emailID) {
+		/*
+		 * Creating excel sheet for report card for each students
+		 * And sending it to them using the method mail
+		 */
 		Sheet sheet=workbook.createSheet(name);
 		
 		CellStyle fontStyle=workbook.createCellStyle();
@@ -187,10 +199,11 @@ class Excel{
 		headerCell.setFont(headerfont);
 		cell.setCellStyle(headerCell);
 		
-		mail(name,emailID,workbook);
+		mail(name,emailID);
 	}
 	
-	private void mail(String name, String emailID, Workbook workbook) {
+	private void mail(String name, String emailID) {
+		//Send report through mail
 		
 		try {
 			File file=File.createTempFile(name, "xlsx");
@@ -212,8 +225,6 @@ class Excel{
 		multipart.addBodyPart(textPart);
 		multipart.addBodyPart(bodyPart);
 		
-		FileOutputStream sample=new FileOutputStream("src/resource/Progress.xlsx");
-		workbook.write(sample);
 		SendMail send=new SendMail(name, emailID, multipart);
 		
 			send.mail();
@@ -221,9 +232,16 @@ class Excel{
 			ex.printStackTrace();
 			}
 	}
+	
+	public void save() throws IOException{
+		FileOutputStream sample=new FileOutputStream("src/resource/Progress.xlsx");
+		workbook.write(sample);
+		workbook.close();
+	}
 }
 
 class ReadFile{
+	//Reading names of the students from a text file
 	
 	private File file=null;
 	
